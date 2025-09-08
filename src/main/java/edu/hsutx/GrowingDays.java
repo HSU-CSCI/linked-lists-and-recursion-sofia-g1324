@@ -22,7 +22,19 @@ public class GrowingDays {
      * @param threshold The temperature threshold for calculating growing degree days.
      */
     GrowingDays(double[] degrees, double threshold) {
-        // TODO - Complete this method.  Fill degreeDays and cumulativeDegreeDays appropriately.
+        // Fill degreeDays
+        degreeDays = new double[degrees.length];
+        for (int i = 0; i < degrees.length; i++) {
+            degreeDays[i] = degrees[i] - threshold;
+        }
+        // Fill cumulativeDegreeDays
+        double total = 0;
+        cumulativeDegreeDays = new double[degrees.length];
+        for (int i = 0; i < degrees.length; i++) {
+            total += degreeDays[i];
+            if (total < 0) total = 0;
+            cumulativeDegreeDays[i] = total;
+        }
     }
 
     /**
@@ -85,10 +97,23 @@ public class GrowingDays {
      * @param left      The left index of the current search range.
      * @param right     The right index of the current search range.
      * @param threshold The cumulative degree days threshold to find.
-     * @return The index of the first day where cumulative degree days exceed the threshold.
+     * @return The index of the first day when cumulative degree days exceed the threshold.
      */
     public int getDayOverCDHelper(int left, int right, double threshold) {
         // TODO - Complete this method
+        int middle = (left + right) / 2;
+        if (cumulativeDegreeDays[middle] == threshold) {
+            int i = middle;
+            while (i != 0 && cumulativeDegreeDays[i] == threshold) {i--;}
+            return i+1;
+        }
+        if (cumulativeDegreeDays[middle] > threshold) return getDayOverCDHelper(left, middle, threshold);
+        if (cumulativeDegreeDays[middle + 1] == threshold) {
+            int i = middle + 1;
+            while (i != 0 && cumulativeDegreeDays[i] == threshold) {i--;}
+            return i+1;
+        }
+        else return getDayOverCDHelper(middle +1, right, threshold);
     }
 
     /**

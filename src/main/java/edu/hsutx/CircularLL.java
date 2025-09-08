@@ -42,7 +42,7 @@ public class CircularLL<E> {
      * @return {@code true} if the list is empty, otherwise {@code false}
      */
     public boolean isEmpty() {
-        // TODO - Complete this method
+        return head == null;
     }
 
     /**
@@ -52,7 +52,19 @@ public class CircularLL<E> {
      * @param e the element to add
      */
     public void addFirst(E e) {
-        // TODO - Complete this method
+        Node<E> newest = new Node<>(e, null);
+        if (isEmpty()) {
+            head = newest;
+            newest.setNext(head);
+            tail = newest;
+        }
+        else {
+            //fix
+            newest.setNext(head);
+            head=newest;
+            tail.next.setNext(newest);
+        }
+        size += 1;
     }
 
     /**
@@ -62,7 +74,18 @@ public class CircularLL<E> {
      * @param e the element to add
      */
     public void addLast(E e) {
-        // TODO - Complete this method
+        Node<E> newest = new Node<>(e, null);
+        if (isEmpty()) {
+            head = newest;
+            newest.setNext(head);
+            tail = newest;
+        }
+        else {
+            newest.setNext(tail.getNext());
+            tail.setNext(newest);
+            tail = newest;
+        }
+        size += 1;
     }
 
     /**
@@ -85,7 +108,8 @@ public class CircularLL<E> {
      * shifting the head of the list to the next element.
      */
     public void rotate() {
-        // TODO - Complete this method
+        tail = tail.getNext();
+        head = head.getNext();
     }
 
     /**
@@ -95,6 +119,8 @@ public class CircularLL<E> {
      */
     public E first() {
         // TODO - Complete this method
+        if (isEmpty()) return null;
+        return head.getData();
     }
 
 }
