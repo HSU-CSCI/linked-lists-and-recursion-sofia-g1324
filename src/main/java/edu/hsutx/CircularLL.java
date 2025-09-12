@@ -42,7 +42,7 @@ public class CircularLL<E> {
      * @return {@code true} if the list is empty, otherwise {@code false}
      */
     public boolean isEmpty() {
-        return head == null;
+        return size == 0;
     }
 
     /**
@@ -59,12 +59,11 @@ public class CircularLL<E> {
             tail = newest;
         }
         else {
-            //fix
             newest.setNext(head);
             head=newest;
-            tail.next.setNext(newest);
+            tail.setNext(newest);
         }
-        size += 1;
+        size++;
     }
 
     /**
@@ -74,18 +73,8 @@ public class CircularLL<E> {
      * @param e the element to add
      */
     public void addLast(E e) {
-        Node<E> newest = new Node<>(e, null);
-        if (isEmpty()) {
-            head = newest;
-            newest.setNext(head);
-            tail = newest;
-        }
-        else {
-            newest.setNext(tail.getNext());
-            tail.setNext(newest);
-            tail = newest;
-        }
-        size += 1;
+            addFirst(e);
+            if (!isEmpty()) rotate();
     }
 
     /**
@@ -96,11 +85,17 @@ public class CircularLL<E> {
      */
     public E removeFirst() {
         if (isEmpty()) return null;
-        Node<E> head = tail.getNext();
-        if (head == tail) tail = null;
-        else tail.setNext(head.getNext());
+        E return_data = head.getData();
+        if (head == tail) {
+            tail = null;
+            head = null;
+        }
+        else {
+            tail.setNext(head.getNext());
+            head = tail.getNext();
+        }
         size--;
-        return head.getData();
+        return return_data;
     }
 
     /**
@@ -108,6 +103,7 @@ public class CircularLL<E> {
      * shifting the head of the list to the next element.
      */
     public void rotate() {
+        if (isEmpty()) return;
         tail = tail.getNext();
         head = head.getNext();
     }
@@ -118,7 +114,6 @@ public class CircularLL<E> {
      * @return the first element of the list, or {@code null} if the list is empty
      */
     public E first() {
-        // TODO - Complete this method
         if (isEmpty()) return null;
         return head.getData();
     }
